@@ -21,6 +21,7 @@ type SubjectEdge struct {
 	Cursor string  `json:"cursor" bson:"cursor,omitempty"`
 }
 
+//Test
 type SubjectConnection struct {
 	Edges      []SubjectEdge  `json:"edges" bson:"edges"`
 	PageInfo   relay.PageInfo `json:"pageInfo" bson:"pageInfo,omitempty"`
