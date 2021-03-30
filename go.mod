@@ -1,4 +1,4 @@
-module github.com/lemorian/go-relay-connection
+module gitlab.com/lemorian/mongo-relay-pagination
 
 go 1.16
 
