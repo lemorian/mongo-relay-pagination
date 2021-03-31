@@ -48,13 +48,21 @@ type Paginator struct {
 	PagingOptions Options
 }
 
-func mergeFilters(filters ...bson.M) bson.M {
+func mergeFilters(cursorFilter *bson.M, searchFilter *bson.M) bson.M {
 	var mergedFilter = bson.M{}
-	for _, filter := range filters {
-		for key, element := range filter {
+
+	if cursorFilter != nil {
+		for key, element := range *cursorFilter {
 			mergedFilter[key] = element
 		}
 	}
+
+	if searchFilter != nil {
+		for key, element := range *searchFilter {
+			mergedFilter[key] = element
+		}
+	}
+
 	return mergedFilter
 }
 
@@ -97,9 +105,9 @@ func (paginator *Paginator) setTotal() error {
 	return nil
 }
 
-func (paginator *Paginator) hasMore(cursorFilter bson.M, searchFilter bson.M, limit int64) (bool, error) {
+func (paginator *Paginator) hasMore(cursorFilter bson.M, searchFilter *bson.M, limit int64) (bool, error) {
 	ctx := paginator.getContext()
-	var mergedFilter = mergeFilters(cursorFilter, searchFilter)
+	var mergedFilter = mergeFilters(&cursorFilter, searchFilter)
 
 	resultCount, err := paginator.Collection.CountDocuments(ctx, mergedFilter)
 
@@ -159,7 +167,7 @@ func (paginator *Paginator) Find() error {
 		return err
 	}
 
-	var mergedFilter = mergeFilters(cursorFilter, *paginator.PagingOptions.Filter)
+	var mergedFilter = mergeFilters(&cursorFilter, paginator.PagingOptions.Filter)
 
 	mgoCursor, err := paginator.Collection.Find(ctx, mergedFilter, opts)
 
@@ -183,13 +191,13 @@ func (paginator *Paginator) Find() error {
 	}
 	pageInfo.EndCursor = &currentCursor
 
-	pageInfo.HasNextPage, err = paginator.hasMore(cursorFilter, *paginator.PagingOptions.Filter, hasNextPageLimit)
+	pageInfo.HasNextPage, err = paginator.hasMore(cursorFilter, paginator.PagingOptions.Filter, hasNextPageLimit)
 
 	if err != nil {
 		return err
 	}
 
-	pageInfo.HasPreviousPage, err = paginator.hasMore(cursorFilterReverse, *paginator.PagingOptions.Filter, 1)
+	pageInfo.HasPreviousPage, err = paginator.hasMore(cursorFilterReverse, paginator.PagingOptions.Filter, 1)
 
 	if err != nil {
 		return err
