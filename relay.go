@@ -188,8 +188,8 @@ func (paginator *Paginator) Find() error {
 		if pageInfo.StartCursor == nil {
 			pageInfo.StartCursor = &currentCursor
 		}
+		pageInfo.EndCursor = &currentCursor
 	}
-	pageInfo.EndCursor = &currentCursor
 
 	pageInfo.HasNextPage, err = paginator.hasMore(cursorFilter, paginator.PagingOptions.Filter, hasNextPageLimit)
 
