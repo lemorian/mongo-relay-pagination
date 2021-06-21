@@ -139,6 +139,8 @@ func (paginator *Paginator) Find() error {
 		hasNextPageLimit = paginator.PagingOptions.Last + 1
 	}
 
+	opts.SetSort(bson.A{"_id", 1})
+
 	var cursorFilter bson.M = bson.M{}
 	var cursorFilterReverse bson.M = bson.M{}
 
