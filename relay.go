@@ -134,12 +134,12 @@ func (paginator *Paginator) Find() error {
 	if paginator.PagingOptions.First > 0 {
 		opts.SetLimit(paginator.PagingOptions.First)
 		hasNextPageLimit = paginator.PagingOptions.First + 1
-	} else {
+	} else if paginator.PagingOptions.Last > 0 {
 		opts.SetLimit(paginator.PagingOptions.Last)
 		hasNextPageLimit = paginator.PagingOptions.Last + 1
 	}
 
-	opts.SetSort(bson.A{"_id", 1})
+	opts.SetSort(bson.D{{Key: "_id", Value: 1}})
 
 	var cursorFilter bson.M = bson.M{}
 	var cursorFilterReverse bson.M = bson.M{}
