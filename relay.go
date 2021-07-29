@@ -134,7 +134,7 @@ func (paginator *Paginator) Find() error {
 	if paginator.PagingOptions.First > 0 {
 		opts.SetLimit(paginator.PagingOptions.First)
 		hasNextPageLimit = paginator.PagingOptions.First + 1
-	} else {
+	} else if paginator.PagingOptions.Last > 0 {
 		opts.SetLimit(paginator.PagingOptions.Last)
 		hasNextPageLimit = paginator.PagingOptions.Last + 1
 	}
