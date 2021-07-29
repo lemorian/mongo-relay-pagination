@@ -68,9 +68,9 @@ func mergeFilters(cursorFilter *bson.M, searchFilter *bson.M) bson.M {
 
 // validateQuery query is to check if user has added certain required params or not
 func (paginator *Paginator) validateQuery(isNormal bool) error {
-	if paginator.PagingOptions.First <= 0 && paginator.PagingOptions.Last <= 0 {
-		return errors.New(PageLimitError)
-	}
+	// if paginator.PagingOptions.First <= 0 && paginator.PagingOptions.Last <= 0 {
+	// 	return errors.New(PageLimitError)
+	// }
 	if isNormal && paginator.ConCreator == nil {
 		return errors.New(DecodeEmptyError)
 	}
